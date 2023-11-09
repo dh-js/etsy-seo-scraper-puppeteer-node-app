@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Etsy Scraper</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .spinner-border {
+            display: none;
+            width: 3rem;
+            height: 3rem;
+            margin: auto;
+        }
+        .full-width {
+            width: 100%;
+        }
+        .container-padding {
+            padding: 1rem;
+        }
+        .btn-primary {
+        background-color: #5da8f7;
+        border-color: #5da8f7;
+        }
+        .term-list {
+        padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid center-screen container-padding" style="width: 80%;">
+        <div class="row full-width">
+            <div class="full-width">
+                <h1 class="text-center">Etsy Scraper</h1>
+                <form action="/etsyScraperEndpoint" method="post" class="form-custom text-center">
+                    <textarea name="searchTerms" class="form-control mb-2" style="width: 100%;" rows="8" placeholder="Enter search terms, one per line"></textarea>
+                    <button type="submit" class="btn btn-primary mb-2">Scrape Etsy</button>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    {{#if completedScrape}}
+                        <div class="alert alert-success mt-3" role="alert">
+                            Scrape completed!
+                        </div>
+                    {{/if}}
+                    {{#if successfulSearchTerms}}
+                        <div class="alert alert-success mt-3" role="alert">
+                            The following search terms had a .txt file successfully created:
+                            <ul class="term-list">
+                                {{#each successfulSearchTerms as |term|}}
+                                    <li>{{term}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    {{/if}}
+                    {{#if unsuccessfulSearchTerms}}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            The following search terms did not have a .txt file successfully created:
+                            <ul class="term-list">
+                                {{#each unsuccessfulSearchTerms as |term|}}
+                                    <li>{{term}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    {{/if}}
+                    {{#if botDetection}}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            Etsy have said you are making too many requests, please try again later.
+                        </div>
+                    {{/if}}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function() {
+                $('.spinner-border').show();
+            });
+        });
+    </script>
+</body>
+
+</html>

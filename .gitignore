@@ -1,0 +1,5 @@
+chromium/
+node_modules/
+/*.txt
+created_keyword_txt_files/*.txt
+/*.exe
