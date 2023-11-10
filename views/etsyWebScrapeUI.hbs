@@ -25,6 +25,7 @@
         }
         .term-list {
         padding-left: 20px;
+        list-style-type: none;
         }
     </style>
 </head>
@@ -34,9 +35,13 @@
         <div class="row full-width">
             <div class="full-width">
                 <h1 class="text-center">Etsy Scraper</h1>
-                <form action="/etsyScraperEndpoint" method="post" class="form-custom text-center">
+                <form action="/etsyScraperEndpoint/bestsellerSearch" method="post" class="form-custom text-center">
                     <textarea name="searchTerms" class="form-control mb-2" style="width: 100%;" rows="8" placeholder="Enter search terms, one per line"></textarea>
-                    <button type="submit" class="btn btn-primary mb-2">Scrape Etsy</button>
+                    <div class="form-inline">
+                        <input type="number" name="numberSpinner" class="form-control mb-2 mr-2" value="20" min="1">
+                        <button type="submit" class="btn btn-primary mb-2 mr-2" id="normalSearch">Normal Search</button>
+                        <button type="submit" class="btn btn-primary mb-2" id="bestsellerSearch">Bestseller Search</button>
+                    </div>
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
@@ -75,12 +80,44 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('form').submit(function() {
-                $('.spinner-border').show();
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.querySelector('form');
+            var spinner = document.querySelector('.spinner-border');
+
+            form.addEventListener('submit', function() {
+                spinner.style.display = 'block';
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var bestsellerSearch = document.getElementById('bestsellerSearch');
+            var normalSearch = document.getElementById('normalSearch');
+            var form = document.querySelector('form');
+            var spinner = document.querySelector('.spinner-border');
+            var textarea = document.querySelector('textarea[name="searchTerms"]');
+
+            function handleSubmit(e, action) {
+                var searchTerms = textarea.value.trim();
+                if (searchTerms === '') {
+                    e.preventDefault();
+                    alert('Please enter at least one search term.');
+                    return false;
+                }
+
+                e.preventDefault();
+                form.action = action;
+                spinner.style.display = 'block';
+                form.submit();
+            }
+
+            bestsellerSearch.addEventListener('click', function(e) {
+                handleSubmit(e, '/etsyScraperEndpoint/bestsellerSearch');
+            });
+
+            normalSearch.addEventListener('click', function(e) {
+                handleSubmit(e, '/etsyScraperEndpoint/normalSearch');
             });
         });
     </script>

@@ -8,6 +8,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "express": "4.x",
     "hbs": "^4.1.2",
     "puppeteer": "^20.7.4",
